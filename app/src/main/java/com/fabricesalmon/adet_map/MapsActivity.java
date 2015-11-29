@@ -33,9 +33,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 double latitude = Double.parseDouble(l_Bundle.getString(LocationService.CS_LATITUDE));
                 double longitude = Double.parseDouble(l_Bundle.getString(LocationService.CS_LONGITUDE));
 
-                MarkerOptions marker = new MarkerOptions().position(new LatLng(latitude, longitude)).title("Hello Maps ");
+                LatLng l_LatLng = new LatLng(latitude, longitude);
+
+                MarkerOptions marker = new MarkerOptions().position(l_LatLng).title("Current position");
 
                 m_GoogleMap.addMarker(marker);
+
+                m_GoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(l_LatLng, 14));
             }
         } // end onReceive
     }; /* end BroadcastReceiver */
@@ -52,8 +56,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         startService(l_Intent);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
