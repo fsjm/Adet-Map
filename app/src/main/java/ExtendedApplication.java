@@ -1,7 +1,6 @@
 package com.fabricesalmon.adet_map;
 
 import android.app.Application;
-import android.content.Intent;
 
 public class ExtendedApplication extends Application {
     private static ExtendedApplication m_ExtendedApplication = null;
