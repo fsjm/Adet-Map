@@ -24,16 +24,21 @@ public class LocationService extends Service implements LocationListener {
 
         if (is_Debugging && BuildConfig.DEBUG) Log.i(ms_TAG, "onCreate .....");
 
-        m_LocationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-        m_LocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 0, this);
-
         // Creating a criteria object to retrieve provider
         Criteria l_Criteria = new Criteria();
+        l_Criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        l_Criteria.setAltitudeRequired(false);
+        l_Criteria.setBearingRequired(false);
+        l_Criteria.setCostAllowed(true);
+        l_Criteria.setPowerRequirement(Criteria.POWER_LOW);
+
+        m_LocationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
 
         // Getting the name of the best provider
         String ls_Provider = m_LocationManager.getBestProvider(l_Criteria, false);
-
         if (null != ls_Provider) {
+            m_LocationManager.requestLocationUpdates(ls_Provider, 10000, 0, this);
+
             // Getting Current Location
             Location l_Location = m_LocationManager.getLastKnownLocation(ls_Provider);
 
@@ -43,6 +48,7 @@ public class LocationService extends Service implements LocationListener {
                 Broadcast(l_Location);
             }
         }
+        else m_LocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 0, this);
     }
 
     @Override

@@ -42,7 +42,6 @@
             android:name=".LocationService"
             android:label="My location service" >
         </service>
-        <receiver android:name=".MapsActivity"></receiver>
     </application>
 
 </manifest>
