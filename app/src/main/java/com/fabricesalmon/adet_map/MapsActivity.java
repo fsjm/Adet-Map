@@ -27,15 +27,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         public void onReceive(Context context, Intent intent) {
             if (null == m_GoogleMap) Log.i(ms_TAG, "m_GoogleMap is null");
             else {
+                if (is_Debugging && BuildConfig.DEBUG) Log.i(ms_TAG, "BroadcastReceiver .....");
+
                 Bundle l_Bundle = intent.getExtras();
-                double latitude = Double.parseDouble(l_Bundle.getString(LocationService.CS_LATITUDE));
-                double longitude = Double.parseDouble(l_Bundle.getString(LocationService.CS_LONGITUDE));
+                double ld_latitude = Double.parseDouble(l_Bundle.getString(LocationService.CS_LATITUDE));
+                double ld_longitude = Double.parseDouble(l_Bundle.getString(LocationService.CS_LONGITUDE));
+                String ls_LocationName = l_Bundle.getString(LocationService.CS_LOCATION_NAME);
 
-                LatLng l_LatLng = new LatLng(latitude, longitude);
+                LatLng l_LatLng = new LatLng(ld_latitude, ld_longitude);
 
-                MarkerOptions marker = new MarkerOptions().position(l_LatLng).title("Current position");
+                MarkerOptions l_MarkerOptions = new MarkerOptions().position(l_LatLng).title(ls_LocationName);
 
-                m_GoogleMap.addMarker(marker);
+                m_GoogleMap.addMarker(l_MarkerOptions);
 
                 m_GoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(l_LatLng, 14));
             }

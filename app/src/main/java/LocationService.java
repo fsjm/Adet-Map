@@ -14,6 +14,7 @@ public class LocationService extends Service implements LocationListener {
     public static String CS_ACTION = "com.fabricesalmon.adet_map.NEW_LOCATION";
     public static String CS_LATITUDE = "Latitude";
     public static String CS_LONGITUDE = "Longitude";
+    public static String CS_LOCATION_NAME = "LcationName";
     private final String ms_TAG = this.getClass().getSimpleName();
     private LocationManager m_LocationManager = null;
     private Boolean is_Debugging = true;
@@ -45,7 +46,7 @@ public class LocationService extends Service implements LocationListener {
             if (null != l_Location) {
                 if (is_Debugging && BuildConfig.DEBUG) Log.i(ms_TAG, "getLastKnownLocation .....");
 
-                Broadcast(l_Location);
+                Broadcast(l_Location, "Initial position");
             }
         }
         else m_LocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 0, this);
@@ -85,6 +86,17 @@ public class LocationService extends Service implements LocationListener {
     public void onProviderEnabled(String provider) {
 
         if (is_Debugging && BuildConfig.DEBUG) Log.i(ms_TAG, "onProviderEnabled .....");
+
+        m_LocationManager.requestLocationUpdates(provider, 10000, 0, this);
+
+        // Getting Current Location
+        Location l_Location = m_LocationManager.getLastKnownLocation(provider);
+
+        if (null != l_Location) {
+            if (is_Debugging && BuildConfig.DEBUG) Log.i(ms_TAG, "getLastKnownLocation .....");
+
+            Broadcast(l_Location, "InitialPosition");
+        }
     }
 
     @Override
@@ -97,14 +109,15 @@ public class LocationService extends Service implements LocationListener {
     public void onLocationChanged(Location l_Location) {
 
         if (is_Debugging && BuildConfig.DEBUG) Log.i(ms_TAG, "onLocationChanged .....");
-        Broadcast(l_Location);
+        Broadcast(l_Location, "");
     }
 
-    private void Broadcast(Location l_Location) {
+    private void Broadcast(Location l_Location, String ls_LocationName) {
         Intent l_Intent = new Intent(CS_ACTION);
 
         l_Intent.putExtra(CS_LATITUDE, String.valueOf(l_Location.getLatitude()));
         l_Intent.putExtra(CS_LONGITUDE, String.valueOf(l_Location.getLongitude()));
+        l_Intent.putExtra(CS_LOCATION_NAME, ls_LocationName);
 
         sendBroadcast(l_Intent);
     }
